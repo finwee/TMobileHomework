@@ -50,11 +50,7 @@ public class TaskServiceImpl implements TaskService {
 
         logger.info("Both user (acquiredBy and createdBy) found in repository, going to create and save new task");
 
-        Task taskToSave = new Task();
-        taskToSave.setUserNote(taskDTO.getUserNote());
-        taskToSave.setTaskData(taskDTO.getTaskData());
-        taskToSave.setAcquiredByUser(acquiredByUser.get());
-        taskToSave.setCreatedByUser(createdByUser.get());
+        Task taskToSave = createTaskFromDTO(taskDTO, acquiredByUser, createdByUser);
 
         Task savedTask = taskRepository.save(taskToSave);
 
@@ -76,11 +72,18 @@ public class TaskServiceImpl implements TaskService {
             logger.error("No user found in repository for ID: {}!", taskDTO.getAcquiredByUserId());
             throw new UserNotFoundException(taskDTO.getAcquiredByUserId(), "acquiredBy");
         }
+        Optional<User> createdByUser = userRepository.findById(taskDTO.getCreatedByUserId());
+        if (createdByUser.isEmpty()) {
+            logger.error("No user found in repository for ID: {}!", taskDTO.getCreatedByUserId());
+            throw new UserNotFoundException(taskDTO.getCreatedByUserId(), "createdBy");
+        }
 
         return taskRepository.findById(taskDTO.getId()).map(task -> {
+
                     task.setTaskData(taskDTO.getTaskData());
                     task.setUserNote(taskDTO.getUserNote());
-                    task.setAcquiredByUser(acquiredByUser.get());
+                    acquiredByUser.ifPresent(task::setAcquiredByUser);
+                    createdByUser.ifPresent(task::setCreatedByUser);
                     taskRepository.save(task);
 
                     logger.info("Task with ID: '{}' successfully updated at repository", taskDTO.getId());
@@ -101,7 +104,7 @@ public class TaskServiceImpl implements TaskService {
         List<TaskDTO> result = new ArrayList<>();
 
         taskRepository.findByAcquiredByUser(acquiredBy).forEach(task ->
-                    result.add(new TaskDTO(task))
+                result.add(new TaskDTO(task))
         );
 
         logger.info("For parameter acquiredBy: '{}' was found number of tasks: '{}'", acquiredBy, result.size());
@@ -119,11 +122,19 @@ public class TaskServiceImpl implements TaskService {
         List<TaskDTO> result = new ArrayList<>();
 
         taskRepository.findByUserNoteContaining(userNote).forEach(task ->
-                    result.add(new TaskDTO(task))
+                result.add(new TaskDTO(task))
         );
 
         logger.info("For parameter userNote: '{}' was found number of tasks: '{}'", userNote, result.size());
         return result;
     }
 
+    private Task createTaskFromDTO(TaskDTO dto, Optional<User> acquiredBy, Optional<User> createdBy) {
+        Task task = new Task();
+        task.setUserNote(dto.getUserNote());
+        task.setTaskData(dto.getTaskData());
+        acquiredBy.ifPresent(task::setAcquiredByUser);
+        createdBy.ifPresent(task::setCreatedByUser);
+        return task;
+    }
 }

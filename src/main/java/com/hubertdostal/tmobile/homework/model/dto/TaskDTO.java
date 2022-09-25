@@ -58,6 +58,13 @@ public class TaskDTO {
         this.createdByUserId = task.getCreatedByUser() != null ? task.getAcquiredByUser().getId() : null;
     }
 
+    public TaskDTO(String userNote, String taskData, Long acquiredByUserId, Long createdByUserId) {
+        this.userNote = userNote;
+        this.taskData = taskData;
+        this.acquiredByUserId = acquiredByUserId;
+        this.createdByUserId = createdByUserId;
+    }
+
     public Long getId() {
         return id;
     }
