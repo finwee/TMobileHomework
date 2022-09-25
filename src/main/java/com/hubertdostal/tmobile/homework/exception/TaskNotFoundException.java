@@ -5,7 +5,7 @@ package com.hubertdostal.tmobile.homework.exception;
  *
  * @author hubert.dostal@gmail.com
  */
-public class TaskNotFoundException extends Throwable {
+public class TaskNotFoundException extends Exception {
 
     /**
      * Id for which no {@link com.hubertdostal.tmobile.homework.model.Task} exists
