@@ -52,6 +52,7 @@ To run tests just type in terminal following:
 - 	What DB to use? For demonstration purposes in-memory H2 will be sufficient
 -	What DB constraint / indexes / datapyses to use? Please see comment in file [https://github.com/finwee/TMobileHomework/blob/main/src/main/resources/schema-h2.sql](https://github.com/finwee/TMobileHomework/blob/main/src/main/resources/schema-h2.sql)
 -	Should we use some security layer? In real world yes but for sake of this demo not. Thats why value for createdBy user is also part of input JSON and not retrived based on authenticated user
+- 	Use Lombok project to generate boilerplate code? I would use it but to some devs dont like so not used for sake of demo
 - 	Please if any other questions needs to be answered, just drop me email to hubert.dostal@gmail.com
 
 Thank you very much!
