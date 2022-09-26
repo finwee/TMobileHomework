@@ -1,5 +1,9 @@
--- script to create H2 database schema
+-- for purposes of this demo drop schemas to be sure DB is clean
+DROP ALL OBJECTS;
+DROP SCHEMA IF EXISTS SCHEMA1 CASCADE;
+DROP SCHEMA IF EXISTS SCHEMA2 CASCADE;
 
+-- script to create H2 database schema
 CREATE SCHEMA IF NOT EXISTS SCHEMA1;
 CREATE SCHEMA IF NOT EXISTS SCHEMA2;
 
@@ -8,7 +12,7 @@ CREATE ALIAS IF NOT EXISTS FT_INIT FOR "org.h2.fulltext.FullText.init";
 CALL FT_INIT();
 
 -- Used for generated IDs. For sample it is enough like this for sake of this app
-CREATE SEQUENCE "HIBERNATE_SEQUENCE"
+CREATE SEQUENCE IF NOT EXISTS "HIBERNATE_SEQUENCE"
 MINVALUE 1
 MAXVALUE 999999999
 INCREMENT BY 1
